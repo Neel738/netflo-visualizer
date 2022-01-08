@@ -1,12 +1,14 @@
 import { Button } from "@mui/material";
 import React from "react";
+import { GraphBuilderContainer } from "./GraphBuilderContainer";
+import { ToolBar } from "./ToolBar";
 
 export const MainContainer = () => {
   return (
     <React.Fragment>
-      <Button variant="contained" color="primary">
-        Start
-      </Button>
+      <ToolBar />
+
+      <GraphBuilderContainer />
     </React.Fragment>
   );
 };
