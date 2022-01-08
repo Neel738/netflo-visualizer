@@ -1,9 +1,9 @@
-import { MainContainer } from "./components/MainContainer";
+import { GraphBuilderContainer } from "./components/GraphBuilderContainer";
 
 function App() {
   return (
     <div className="App">
-      <MainContainer />
+      <GraphBuilderContainer />
     </div>
   );
 }

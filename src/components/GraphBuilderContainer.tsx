@@ -1,8 +1,13 @@
+import { Box, Button } from "@mui/material";
 import React from "react";
-import Graph from "react-graph-vis";
+import Graph, { Network } from "react-graph-vis";
+import { Timeline } from "vis";
+import { ToolBar } from "./ToolBar";
 
 export const GraphBuilderContainer = () => {
-  const graph = {
+  const [network, setNetwork] = React.useState<Network>();
+
+  const initialGraph = {
     nodes: [
       { id: 1, label: "Node 1", title: "node 1 tootip text" },
       { id: 2, label: "Node 2", title: "node 2 tootip text" },
@@ -18,6 +23,19 @@ export const GraphBuilderContainer = () => {
     ],
   };
 
+  const [graph, setGraph] = React.useState(initialGraph);
+
+  const addNode = () => {
+    setGraph(({ nodes, edges }) => {
+      const id = nodes.length + 1;
+      return {
+        nodes: [...nodes, { id, label: `Node ${id}`, title: "new title" }],
+        edges,
+      };
+    });
+    network?.fit();
+  };
+
   const options = {
     layout: {
       hierarchical: true,
@@ -26,6 +44,12 @@ export const GraphBuilderContainer = () => {
       color: "#000000",
     },
     height: "500px",
+    physics: {
+      //   enabled: false,
+    },
+    interaction: {
+      zoomView: false,
+    },
   };
 
   const events = {
@@ -34,13 +58,34 @@ export const GraphBuilderContainer = () => {
     },
   };
   return (
-    <Graph
-      graph={graph}
-      options={options}
-      events={events}
-      getNetwork={(network) => {
-        //  if you want access to vis.js network api you can set the state in a parent component using this property
-      }}
-    />
+    <div className="graph-builder">
+      <p>Currently showing {graph.nodes.length} nodes</p>
+      {/* <ToolBar /> */}
+      <Button variant={"contained"} onClick={addNode}>
+        Add Node
+      </Button>
+
+      <Box sx={{ border: "1px solid black" }}>
+        <Graph
+          graph={graph}
+          options={options}
+          events={events}
+          getNetwork={(network) => {
+            //  if you want access to vis.js network api you can set the state in a parent component using this property
+            setNetwork(network);
+          }}
+        />
+      </Box>
+
+      <Button
+        variant={"contained"}
+        color={"secondary"}
+        onClick={() => {
+          network?.fit();
+        }}
+      >
+        Reset View
+      </Button>
+    </div>
   );
 };
